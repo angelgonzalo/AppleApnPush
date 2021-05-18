@@ -49,7 +49,12 @@ class PayloadEncoder implements PayloadEncoderInterface
         $data = [];
 
         if ($aps->getAlert()) {
-            $data['alert'] = $this->convertAlertToArray($aps->getAlert());
+            if ($aps->getAlert()->isPlain() == TRUE) {
+                $data['alert'] = $this->convertAlertToString($aps->getAlert());
+            }else{
+                $data['alert'] = $this->convertAlertToArray($aps->getAlert());
+            }
+
         }
 
         if ($aps->getSound()) {
@@ -126,6 +131,31 @@ class PayloadEncoder implements PayloadEncoderInterface
         if ($alert->getLaunchImage()) {
             $data['launch-image'] = $alert->getLaunchImage();
         }
+
+        return $data;
+    }
+
+    /**
+     * Convert alert object to string
+     *
+     * @param Alert $alert
+     *
+     * @return string
+     */
+    private function convertAlertToString(Alert $alert): string
+    {
+        $data = '';
+        $data_array = [] ;
+
+        if ($alert->getTitle()) {
+            $data_array['title'] = $alert->getTitle();
+        }
+
+        if ($alert->getBody() || !$alert->getBodyLocalized()->getKey()) {
+            $data_array['body'] = $alert->getBody();
+        }
+
+        $data = implode(" ", $data_array);
 
         return $data;
     }

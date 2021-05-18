@@ -49,15 +49,21 @@ class Alert
     private $launchImage = '';
 
     /**
+     * @var boolean
+     */
+    private $isPlain = FALSE;
+
+    /**
      * Constructor.
      *
      * @param string $body
      * @param string $title
      */
-    public function __construct(string $body = '', string $title = '')
+    public function __construct(string $body = '', string $title = '', bool $isPlain = FALSE)
     {
         $this->body = $body;
         $this->title = $title;
+        $this->isPlain = $isPlain;
         $this->titleLocalized = new Localized('');
         $this->bodyLocalized = new Localized('');
         $this->actionLocalized = new Localized('');
@@ -218,4 +224,15 @@ class Alert
     {
         return $this->launchImage;
     }
+
+    /**
+     * Get if alert is a string
+     *
+     * @return bool
+     */
+    public function isPlain(): bool
+    {
+        return $this->isPlain;
+    }
+
 }
