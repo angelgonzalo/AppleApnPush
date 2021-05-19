@@ -92,6 +92,10 @@ class PayloadEncoder implements PayloadEncoderInterface
             $data['thread-id'] = $aps->getThreadId();
         }
 
+        if ($aps->getCustomData()) {
+            $data = \array_merge($aps->getCustomData(), $data);
+        }
+
         return $data;
     }
 

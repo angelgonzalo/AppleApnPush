@@ -54,6 +54,11 @@ class Aps
     private $threadId = '';
 
     /**
+     * @var array
+     */
+    private $customData;
+
+    /**
      * Constructor.
      *
      * @param Alert|null $alert
@@ -251,5 +256,41 @@ class Aps
     public function getThreadId(): string
     {
         return $this->threadId;
+    }
+    /**
+     * Add or replace custom data
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return Aps
+     *
+     * @throws \InvalidArgumentException
+     */
+
+    public function withCustomData(string $name, $value): Aps
+    {
+        if ($value && !is_array($value) && !is_scalar($value) && !$value instanceof \JsonSerializable) {
+            throw new \InvalidArgumentException(sprintf(
+                'The custom data value should be a scalar or \JsonSerializable instance, but "%s" given.',
+                is_object($value) ? get_class($value) : gettype($value)
+            ));
+        }
+
+        $cloned = clone $this;
+
+        $cloned->customData[$name] = $value;
+
+        return $cloned;
+    }
+
+    /**
+     * Get custom data
+     *
+     * @return array
+     */
+    public function getCustomData(): array
+    {
+        return $this->customData;
     }
 }
